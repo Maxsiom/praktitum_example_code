@@ -14,7 +14,7 @@ The Intelligent Targeting Assistant should support the player to shoot on the de
 - Player should always shoot at the desired target 
  
 ![Drawn figure](./Images/figure1.PNG)  
-Figure 1: The player model should always aim at the desired target, no matter if it is positioned higher than the others. (Right coordinate system: vertical axis: height, horizontal axis: horizontal distance) 
+**Figure 1**: *The player model should always aim at the desired target, no matter if it is positioned higher than the others. (Right coordinate system: vertical axis: height, horizontal axis: horizontal distance)*  
  
  
 ## Implementation 
@@ -24,18 +24,18 @@ Figure 1: The player model should always aim at the desired target, no matter if
 To differentiate between targets that are targetable and those which should not be shot at, we defined a layer called “Shootable” for all targetable game objects in the scene. Every object using this layer can be targeted by our Intelligent Targeting Assistant. In addition to this, they all need to have at least one active collider. 
  
 ![Unity figure 1](./Images/figure2.PNG)  
-Figure 2: Inspector of an enemy with the needed layer “Shootable” and collider. 
+**Figure 2**: *Inspector of an enemy with the needed layer “Shootable” and collider.* 
  
 Furthermore, the targetable game object needs one child with the attached script component “TargetPointManager.cs” and at least one squared or round game object with the script component “TargetPoint.cs” attached to each of them. The TargetPoints have their renderers deactivated. 
 
 ![Unity figure 2](./Images/figure3.PNG)  
-Figure 3: Targetable object with the needed TargetPointManager and TargetPoints. 
+**Figure 3**: *Targetable object with the needed TargetPointManager and TargetPoints.* 
  
 Each TargetPoint represents a region of the targetable object, at which can be shot at. It can either be a squared rectangle or a round circle and must be set in the components preferences. Its size or radius conforms to the region, which can be hit, if one shot is directed to the TargetPoint. There is also an option to make the TargetPoint a critical or uncritical region, so the target can get higher damage when a critical region is hit. Lastly, there is an option for the angle, in which the TargetPoint can be hit. The opening of the angle faces to the local z-axis of the TargetPoint and can only be hit, when the player is positioned in the angle.  
 The TargetPoint game objects can be attached to every child game object of the targetable object’s hierarchy. Thus, during gameplay, they are moved by the local motions of the parent object like arms or legs. 
 
 ![Cubes](./Images/figure4.PNG)  
-Figure 4: On the left side is a targetable object without rendered TargetPoints and on the right, it has rendered TargetPoints, which cover all sides.  
+**Figure 4**: *On the left side is a targetable object without rendered TargetPoints and on the right, it has rendered TargetPoints, which cover all sides.*  
  
 The TargetPointManager finds and knows each of the targetable object’s TargetPoints and remains as the contact component for other scripts. For each TargetPoint, it calculated which are the nearest other TargetPoints with an angle overlapping its angle. 
  
@@ -46,27 +46,27 @@ Then it sorts out the targetable objects, which are not in the right angle (gree
 Finally, it sorts the targets from nearest to farthest.  
  
 ![Visualized tracking zone](./Images/figure5.PNG)  
-Figure 5: The visualized OverlapSphere in front of the player. Red is the sphere with the dimension of the weapon’s range. Green is the angle in which the targetable object can be shot. Blue is the local z-axis of the player model showing the direction it is faced to. 
+**Figure 5**: *The visualized OverlapSphere in front of the player. Red is the sphere with the dimension of the weapon’s range. Green is the angle in which the targetable object can be shot. Blue is the local z-axis of the player model showing the direction it is faced to.* 
  
 Every targetable object is stored in an array and can be queried by the main system script. It calculates the main target’s hit TargetPoints for all requested shots of the weapon.   
  
 ![Marked Targets](./Images/figure6.PNG)  
-Figure 6: Valid target objects are marked by boxes (green: main target, red: further targets).  
+**Figure 6**: *Valid target objects are marked by boxes (green: main target, red: further targets).*  
  
 For this purpose, the main system script uses the accuracy and precision of the weapon, which can be set in its options. The higher the accuracy, the more shots will be land in the center of the TargetPoint. The higher the precision, the higher is the chance that all shots are near to each other. Besides, it uses the critical hit rating of the weapon to higher the chance to target critical TargetPoints.  
  
 ![Accuracy and Precision](./Images/figure7.PNG)  
-Figure 7: Illustration which shows the differences between accuracy and precision. (Source opened 21st of September 2017: http://www.dnasoftware.com/ourproducts/copycount/precision-and-accuracy/)  
+**Figure 7**: *Illustration which shows the differences between accuracy and precision. (Source opened 21st of September 2017: http://www.dnasoftware.com/ourproducts/copycount/precision-and-accuracy/)*  
  
 That means that each shot (even in a salve) is likely to have a different destination point. The TargetPoint could even differ from the last shot’s TargetPoint.  
 
 ![Hit target](./Images/figure8.PNG)  
-Figure 8: Shooting from the same position without changing the direction. The white spheres illustrate the bullet holes on the hit TargetPoints. The TargetPoints changed because of the accuracy and precision of the weapon.  
+**Figure 8**: *Shooting from the same position without changing the direction. The white spheres illustrate the bullet holes on the hit TargetPoints. The TargetPoints changed because of the accuracy and precision of the weapon.*  
  
 Each weapon has its own projector preference, which is used to mark the main target in the game scene. It appears above the Intelligent Targeting Assistant’s preferred targetable object facing downwards to the ground.  
 
 ![Projector](./Images/figure9.PNG)  
-Figure 9: A projector marking the preferred targetable object by the system.  
+**Figure 9**: *A projector marking the preferred targetable object by the system.*  
  
 ## Result 
  
